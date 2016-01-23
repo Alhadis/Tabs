@@ -1,0 +1,19 @@
+/** Core styling */
+.tabs{
+	position: relative;
+}
+	/** Tab */
+	.tabs > * > :first-child{
+		position: absolute;
+		margin: 0;
+		top: 0;
+	}
+	
+	/** Panel */
+	.tabs > * > :last-child{
+		display: none;
+	}
+		/** Active panel */
+		.tabs > .active > :last-child{
+			display: block;
+		}

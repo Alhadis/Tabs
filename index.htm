@@ -5,7 +5,9 @@
 <meta name="viewport" content="initial-scale=1, minimum-scale=1" />
 <title>Tabs</title>
 
+<link rel="stylesheet" type="text/css" href="tabs.css" />
 <style>
+/** Demo styling, etc */
 body{
 	font-family: Garamond, Georgia;
 }
@@ -30,27 +32,6 @@ body{
 	.body{
 		padding: 1em;
 	}
-
-
-/** Core styling */
-.tabs{
-	position: relative;
-}
-	/** Tab */
-	.tabs > * > :first-child{
-		position: absolute;
-		margin: 0;
-		top: 0;
-	}
-	
-	/** Panel */
-	.tabs > * > :last-child{
-		display: none;
-	}
-		/** Active panel */
-		.tabs > .active > :last-child{
-			display: block;
-		}
 </style>
 </head>
 
