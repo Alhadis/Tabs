@@ -5,7 +5,6 @@
 	/** Tab */
 	.tabs > * > :first-child{
 		position: absolute;
-		margin: 0;
 		top: 0;
 	}
 	
