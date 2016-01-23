@@ -8,6 +8,14 @@ class Tab{
 		this.panel = el.lastElementChild;
 	}
 	
+	get active(){ return this._active }
+	set active(input){
+		if((input = !!input) !== this._active){
+			this.el.classList.toggle("active", input);
+			this._active = input;
+		}
+	}
+	
 	
 	get offset(){
 		if(undefined === this._offset)
