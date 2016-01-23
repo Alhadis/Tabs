@@ -36,6 +36,13 @@ class TabGroup{
 	}
 	
 	
+	
+	/**
+	 * Zero-based index of the currently-selected tab.
+	 *
+	 * @property
+	 * @type {Number}
+	 */
 	get active(){ return this._active || 0 }
 	set active(input){
 		if((input = +input) !== this._active){
