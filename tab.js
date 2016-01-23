@@ -1,5 +1,8 @@
 "use strict";
 
+const touchEnabled = "ontouchstart" in document.documentElement;
+const pressEvent   = touchEnabled ? "touchend" : "click";
+
 
 class Tab{
 	
@@ -10,7 +13,13 @@ class Tab{
 		this.label = el.firstElementChild;
 		this.panel = el.lastElementChild;
 		
-		this.label.addEventListener()
+		this.label.addEventListener(pressEvent, e => {
+			if(e.type !== "touchend" || e.cancelable){
+				group.active = this.index;
+				e.preventDefault();
+			}
+			return false;
+		});
 	}
 	
 	get active(){ return this._active }
