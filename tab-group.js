@@ -46,9 +46,27 @@ class TabGroup{
 	}
 	
 	
+	/**
+	 * Additional padding to insert between the tab labels and the container's top-edge.
+	 *
+	 * @property
+	 * @type {Number}
+	 */
+	get topSlug(){ return this._topSlug || 0 }
+	set topSlug(input){
+		input = +input;
+		if(input < 0) input = 0;
+		if((input = +input) !== this._topSlug){
+			this._topSlug = input;
+			this.update();
+		}
+	}
+	
+	
 	update(){
 		let maxHeight = 0;
 		let offset    = 0;
+		let slug      = this._topSlug;
 		for(let i of this.tabs){
 			i.offset   = offset;
 			let box    = i.label.getBoundingClientRect();
@@ -56,7 +74,10 @@ class TabGroup{
 			let height = Math.round(box.bottom - box.top);
 			if(height > maxHeight)
 				maxHeight = height;
+			
+			if(undefined !== slug)
+				i.label.style.top = slug > 0 ? slug + "px" : null;
 		}
-		this.el.style.paddingTop = maxHeight + "px";
+		this.el.style.paddingTop = (maxHeight + this.topSlug) + "px";
 	}
 }
