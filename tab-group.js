@@ -52,7 +52,7 @@ class TabGroup{
 		for(let i of this.tabs){
 			i.offset   = offset;
 			let box    = i.label.getBoundingClientRect();
-			offset    += Math.round(box.right  - box.left);
+			offset    += Math.round(box.right  - box.left) + i.marginRight;
 			let height = Math.round(box.bottom - box.top);
 			if(height > maxHeight)
 				maxHeight = height;

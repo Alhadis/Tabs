@@ -31,8 +31,9 @@ p{
 		background: linear-gradient(#eee, #ccc);
 		text-shadow: 0 1px 0 #fff;
 		border-radius: 1em 1em 0 0;
-		box-shadow: inset -.1em 0 .15em #000;
 		cursor: pointer;
+		border: 1px solid #ccc;
+		border-bottom: 0;
 		
 		-webkit-user-select: none;
 		-moz-user-select:    none;
@@ -45,11 +46,9 @@ p{
 		padding: 1em;
 		background: #fff;
 		border: 1px solid #ccc;
+		margin-top: -1px;
 	}
 		.tabs > .active > :first-child{
 			background: #fff;
-			border: 1px solid #ccc;
-			border-bottom: 0;
-			box-shadow: none;
 			cursor: default;
 		}
