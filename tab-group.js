@@ -1,3 +1,6 @@
+"use strict";
+
+
 class TabGroup{
 	
 	constructor(el, options = {}){

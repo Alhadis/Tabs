@@ -1,3 +1,6 @@
+"use strict";
+
+
 class Tab{
 	
 	constructor(el, group){
@@ -6,6 +9,8 @@ class Tab{
 		
 		this.label = el.firstElementChild;
 		this.panel = el.lastElementChild;
+		
+		this.label.addEventListener()
 	}
 	
 	get active(){ return this._active }
