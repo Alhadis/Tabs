@@ -12,16 +12,18 @@
 
 
 <body>
+
+	<label><input type="checkbox" value="0" /> Disable tab-group</label>
 	
-	<ul class="tabs">
+	<ul>
 		<li>
 			<h2>Aliquam vitae</h2>
 			<div class="body">
 				<p><dfn>Aliquam vitae</dfn> aliquam orci, id tristique neque. Proin vitae ex elit. Morbi dignissim, urna a sodales egestas, ante nibh vulputate mauris, vel porttitor velit nibh eu mauris. Aenean porta dolor nec dolor finibus ullamcorper. Morbi eu nibh sit amet ipsum tristique condimentum. Nam placerat, nunc nec vulputate suscipit, arcu lectus tristique massa, sit amet hendrerit magna sapien id orci. Mauris massa nisi, rhoncus eu ligula feugiat, faucibus commodo dolor. Maecenas laoreet dolor est, vel lobortis tortor dapibus auctor. Sed egestas interdum nisl accumsan vehicula. Sed et erat ut sem posuere lacinia. Vivamus placerat faucibus consequat. Donec mattis, erat in tincidunt placerat, lacus turpis accumsan nulla, sit amet consectetur diam odio eu ligula. Aliquam vitae tincidunt ipsum.</p>
 				<p>Proin eget semper nisi, ultrices convallis elit. Sed commodo, tortor eget dignissim cursus, dui felis mattis nibh, et maximus odio mi viverra ligula. Aliquam molestie et odio nec ornare. Duis at dignissim mi. Mauris semper ante venenatis erat aliquam, id lobortis risus tempus. Donec quis erat pretium, lobortis dui sit amet, eleifend tortor. Donec fringilla ante dui, hendrerit placerat mauris commodo ut. In ornare rhoncus nibh. Etiam rutrum, odio non rutrum porttitor, eros mauris commodo dui, id elementum lorem neque in justo. Vestibulum dolor turpis, pulvinar nec mollis a, consequat vel dui. Nam a lobortis nunc. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Suspendisse dolor felis, interdum ac arcu non, pulvinar fringilla elit. Nunc id dapibus lectus. Maecenas et suscipit sapien.</p>
 				
-				
-				<ul class="tabs">
+				<label><input type="checkbox" value="1" /> Disable tab-group</label>
+				<ul>
 					<li>
 						<h2>Aliquam vitae</h2>
 						<div class="body">
@@ -134,8 +136,14 @@
 		"use strict";
 		
 		var groups = [];
-		[].forEach.call(document.getElementsByClassName("tabs"), function(e){
+		[].forEach.call(document.getElementsByTagName("ul"), function(e){
 			groups.push(new TabGroup(e));
+		});
+		
+		
+		window.addEventListener("change", function(e){
+			var group = groups[e.target.value];
+			group && (group.disabled = !group.disabled);
 		});
 	</script>
 </body>

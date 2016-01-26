@@ -4,7 +4,9 @@
 class TabGroup{
 	
 	constructor(el, options = {}){
-		this.el      = el;
+		this.el            = el;
+		this.enabledClass  = undefined === options.enabledClass ? "tabs" : options.enabledClass;
+		this.disabledClass = options.disabledClass;
 		
 		/** Create a list of Tab instances from the container's children */
 		let tabs     = [];
@@ -32,7 +34,30 @@ class TabGroup{
 			? (undefined === firstActiveTab ? 0 : firstActiveTab)
 			: options.active;
 		
-		this.update();
+		this.disabled = !!options.disabled;
+	}
+	
+	
+	/**
+	 * Whether the tab-group's been deactivated.
+	 *
+	 * @property
+	 * @type {Boolean}
+	 */
+	get disabled(){ return this._disabled; }
+	set disabled(input){
+		console.log(input);
+		if((input = !!input) !== this._disabled){
+			this._disabled = input;
+			const classes  = this.el.classList;
+			this.enabledClass  && classes.toggle(this.enabledClass,  !input);
+			this.disabledClass && classes.toggle(this.disabledClass,  input);
+			
+			for(let i of this.tabs)
+				i.disabled = input;
+			
+			this.update();
+		}
 	}
 	
 	

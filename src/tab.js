@@ -10,7 +10,7 @@ class Tab{
 		this.label = el.firstElementChild;
 		this.panel = el.lastElementChild;
 		
-		this.label.addEventListener(pressEvent, e => {
+		this.label.addEventListener(pressEvent, this.onPress = e => {
 			if(e.type !== "touchend" || e.cancelable){
 				group.active = this.index;
 				e.preventDefault();
@@ -18,6 +18,43 @@ class Tab{
 			return false;
 		});
 	}
+	
+	
+	/**
+	 * Whether the tab's been deactivated.
+	 *
+	 * Generally not set directly; altered through a TabGroup's .disabled property.
+	 *
+	 * @property
+	 * @type {Boolean}
+	 */
+	get disabled(){ return this._disabled }
+	set disabled(input){
+		if((input = !!input) !== !!this._disabled){
+			const label = this.label;
+			const style = label.style;
+			
+			/** Deactivated */
+			if(this._disabled = input){
+				label.removeEventListener(pressEvent, this.onPress);
+				style.left = null;
+				
+				if(undefined !== this._marginLeft)   style.marginLeft   = null;
+				if(undefined !== this._marginRight)  style.marginRight  = null;
+				if(undefined !== this._marginTop)    style.marginTop    = null;
+				if(undefined !== this._marginBottom) style.marginBottom = null;
+			}
+			
+			else{
+				label.addEventListener(pressEvent, this.onPress);
+				if(undefined !== this._marginLeft)   style.marginLeft   = this._marginLeft   + "px";
+				if(undefined !== this._marginRight)  style.marginRight  = this._marginRight  + "px";
+				if(undefined !== this._marginTop)    style.marginTop    = this._marginTop    + "px";
+				if(undefined !== this._marginBottom) style.marginBottom = this._marginBottom + "px";
+			}
+		}
+	}
+	
 	
 	
 	/**
