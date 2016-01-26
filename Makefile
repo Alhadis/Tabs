@@ -1,5 +1,6 @@
 DIST      := tabs.js
 DIST-MIN  := tabs.min.js
+SRC       := $(addprefix src/,helpers.js tab.js tab-group.js)
 
 
 all: dist
@@ -7,7 +8,7 @@ all: dist
 dist: $(DIST-MIN)
 
 # Concatenated and transpiled ES5 version of ES6 sources
-$(DIST): tab.js tab-group.js
+$(DIST): $(SRC)
 	@cat $^ | \
 	babel --no-babelrc --presets es2015 > $@
 
