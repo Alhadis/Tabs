@@ -31,12 +31,16 @@ class Tab{
 	get disabled(){ return this._disabled }
 	set disabled(input){
 		if((input = !!input) !== !!this._disabled){
-			const label = this.label;
-			const style = label.style;
+			const group    = this.group;
+			const label    = this.label;
+			const classes  = this.el.classList;
+			const active   = group.activeClass;
+			const style    = label.style;
 			
 			/** Deactivated */
 			if(this._disabled = input){
 				label.removeEventListener(pressEvent, this.onPress);
+				classes.remove(active);
 				style.left = null;
 				
 				if(undefined !== this._marginLeft)   style.marginLeft   = null;
@@ -45,12 +49,10 @@ class Tab{
 				if(undefined !== this._marginBottom) style.marginBottom = null;
 			}
 			
+			/** Reactivated */
 			else{
 				label.addEventListener(pressEvent, this.onPress);
-				if(undefined !== this._marginLeft)   style.marginLeft   = this._marginLeft   + "px";
-				if(undefined !== this._marginRight)  style.marginRight  = this._marginRight  + "px";
-				if(undefined !== this._marginTop)    style.marginTop    = this._marginTop    + "px";
-				if(undefined !== this._marginBottom) style.marginBottom = this._marginBottom + "px";
+				group.active === this.index && classes.add(active);
 			}
 		}
 	}
@@ -66,7 +68,7 @@ class Tab{
 	get active(){ return this._active }
 	set active(input){
 		if((input = !!input) !== this._active){
-			this.el.classList.toggle("active", input);
+			this.el.classList.toggle(this.group.activeClass, input);
 			this._active = input;
 		}
 	}

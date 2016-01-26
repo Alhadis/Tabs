@@ -4,7 +4,10 @@
 class TabGroup{
 	
 	constructor(el, options = {}){
+		let activeClass    = options.activeClass || "active";
+		
 		this.el            = el;
+		this.activeClass   = activeClass;
 		this.enabledClass  = undefined === options.enabledClass ? "tabs" : options.enabledClass;
 		this.disabledClass = options.disabledClass;
 		
@@ -15,7 +18,7 @@ class TabGroup{
 		for(let i of Array.from(el.children)){
 			
 			/** If the tab element's flagged as active, store the current index */
-			if(undefined === firstActiveTab && i.classList.contains("active"))
+			if(undefined === firstActiveTab && i.classList.contains(activeClass))
 				firstActiveTab = index;
 			
 			let tab   = new Tab(i, this);
@@ -46,7 +49,6 @@ class TabGroup{
 	 */
 	get disabled(){ return this._disabled; }
 	set disabled(input){
-		console.log(input);
 		if((input = !!input) !== this._disabled){
 			this._disabled = input;
 			const classes  = this.el.classList;
