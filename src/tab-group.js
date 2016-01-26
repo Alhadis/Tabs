@@ -58,7 +58,9 @@ class TabGroup{
 			for(let i of this.tabs)
 				i.disabled = input;
 			
-			this.update();
+			input
+				? this.el.style.paddingTop = null
+				: this.update();
 		}
 	}
 	
