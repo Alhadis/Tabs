@@ -9,6 +9,7 @@ class Tab{
 		
 		this.label = el.firstElementChild;
 		this.panel = el.lastElementChild;
+		this.ariaEnabled = !group.noAria;
 		
 		this.label.addEventListener(pressEvent, this.onPress = e => {
 			if(e.type !== "touchend" || e.cancelable){
@@ -61,6 +62,78 @@ class Tab{
 	
 	
 	/**
+	 * Add or remove relevant ARIA attributes from the tab's elements.
+	 *
+	 * @property
+	 * @type {Boolean}
+	 */
+	get ariaEnabled(){ return this._ariaEnabled; }
+	set ariaEnabled(input){
+		if((input = !!input) !== !!this._ariaEnabled){
+			const label = this.label;
+			const panel = this.panel;
+			this._ariaEnabled = input;
+			
+			/** Enable ARIA-attribute management */
+			if(input){
+				label.setAttribute("role", "tab");
+				panel.setAttribute("role", "tabpanel");
+				
+				
+				/** Ensure the tab's elements have unique ID attributes. */
+				const labelSuffix  = "-heading";
+				const panelSuffix  = "-content";
+				const active       = !!this._active;
+				let elID           = this.el.id;
+				let id;
+				
+				/** Neither of the tab's elements have an ID attribute */
+				if(!label.id && !panel.id){
+					id        = elID || uniqueID("a");
+					label.id  = id + labelSuffix;
+					panel.id  = id + panelSuffix;
+				}
+				
+				/** Either the label or panel lack an ID */
+				else if(!panel.id) panel.id   = (elID || label.id) + panelSuffix;
+				else if(!label.id) label.id   = (elID || panel.id) + labelSuffix;
+				
+				/** Finally, double-check each element's ID is really unique */
+				const $ = s => document.querySelectorAll("#"+s);
+				while($(panel.id).length > 1 || $(label.id).length > 1){
+					id       = uniqueID("a");
+					panel.id = id + panelSuffix;
+					label.id = id + labelSuffix;
+				}
+				
+				/** Update ARIA attributes */
+				label.setAttribute("aria-controls",   panel.id);
+				panel.setAttribute("aria-labelledby", label.id);				
+				
+				
+				/** Update the attributes that're controlled by .active's setter */
+				label.setAttribute("aria-selected",  active);
+				label.setAttribute("aria-expanded",  active);
+				panel.setAttribute("aria-hidden",   !active);
+			}
+			
+			/** Disabling; remove all relevant attributes */
+			else{
+				label.removeAttribute("role");
+				label.removeAttribute("aria-controls");
+				label.removeAttribute("aria-selected");
+				label.removeAttribute("aria-expanded");
+				
+				panel.removeAttribute("role");
+				panel.removeAttribute("aria-labelledby");
+				panel.removeAttribute("aria-hidden");
+			}
+		}
+	}
+	
+	
+	
+	/**
 	 * Whether the tab is currently selected/visible.
 	 *
 	 * @property
@@ -71,6 +144,14 @@ class Tab{
 		if((input = !!input) !== this._active){
 			this.el.classList.toggle(this.group.activeClass, input);
 			this._active = input;
+			
+			/** Update ARIA attributes */
+			if(this.ariaEnabled){
+				const label = this.label;
+				label.setAttribute("aria-selected",      input);
+				label.setAttribute("aria-expanded",      input);
+				this.panel.setAttribute("aria-hidden",  !input);
+			}
 		}
 	}
 	
