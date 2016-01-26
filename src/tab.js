@@ -53,6 +53,7 @@ class Tab{
 			else{
 				label.addEventListener(pressEvent, this.onPress);
 				group.active === this.index && classes.add(active);
+				style.left = this._offset + "px";
 			}
 		}
 	}
