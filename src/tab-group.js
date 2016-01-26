@@ -11,6 +11,7 @@ class TabGroup{
 		this.enabledClass  = undefined === options.enabledClass ? "tabs" : options.enabledClass;
 		this.disabledClass = options.disabledClass;
 		this.noAria        = !!options.noAria;
+		this.noKeys        = !!options.noKeys;
 		
 		/** Create a list of Tab instances from the container's children */
 		let tabs     = [];

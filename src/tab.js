@@ -4,12 +4,60 @@
 class Tab{
 	
 	constructor(el, group){
+		const label = el.firstElementChild;
+		const panel = el.lastElementChild;
+		
 		this.el    = el;
 		this.group = group;
-		
-		this.label = el.firstElementChild;
-		this.panel = el.lastElementChild;
+		this.label = label;
+		this.panel = panel;
 		this.ariaEnabled = !group.noAria;
+		
+		if(!group.noKeys){
+			label.tabIndex = 0;
+			label.addEventListener("keydown", this.onKeyDown = e => {
+				const key = e.keyCode;
+				let tab;
+				
+				switch(key){
+					
+					/** Right arrow: Focus on next tab */
+					case 39:{
+						if(tab = group.tabs[1 + this.index])
+							tab.label.focus();
+						else return;
+						break;
+					}
+					
+					/** Left arrow: Focus on previous tab */
+					case 37:{
+						if(tab = group.tabs[this.index - 1])
+							tab.label.focus();
+						else return;
+						break;
+					}
+					
+					/** Enter: Select tab */
+					case 13:{
+						group.active = this.index;
+						break;
+					}
+					
+					/** Escape: clear focus */
+					case 27:{
+						label.blur();
+						break;
+					}
+					
+					default:{
+						return;
+					}
+				}
+				
+				e.preventDefault();
+				return false;
+			});
+		}
 		
 		this.label.addEventListener(pressEvent, this.onPress = e => {
 			if(e.type !== "touchend" || e.cancelable){
@@ -48,6 +96,16 @@ class Tab{
 				if(undefined !== this._marginRight)  style.marginRight  = null;
 				if(undefined !== this._marginTop)    style.marginTop    = null;
 				if(undefined !== this._marginBottom) style.marginBottom = null;
+				
+				if(this.onKeyDown){
+					label.removeEventListener("keydown", this.onKeyDown);
+					label.removeAttribute("tabindex");
+				}
+				
+				if(this._ariaEnabled){
+					this.ariaEnabled = false;
+					this._ariaEnabled = true;
+				}
 			}
 			
 			/** Reactivated */
@@ -55,6 +113,11 @@ class Tab{
 				label.addEventListener(pressEvent, this.onPress);
 				group.active === this.index && classes.add(active);
 				style.left = this._offset + "px";
+				
+				if(this.onKeyDown){
+					label.addEventListener("keydown", this.onKeyDown);
+					label.tabIndex = 0;
+				}
 			}
 		}
 	}
