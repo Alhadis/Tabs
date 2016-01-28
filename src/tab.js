@@ -59,8 +59,16 @@ class Tab{
 			});
 		}
 		
+		
+		/** Listener to record the viewport's scroll offsets at the beginning of a touch */
+		let scrollX, scrollY;
+		touchEnabled && label.addEventListener("touchstart", this.onTouchStart = e => {
+			scrollX = window.pageXOffset;
+			scrollY = window.pageYOffset;
+		});
+		
 		this.label.addEventListener(pressEvent, this.onPress = e => {
-			if(e.type !== "touchend" || e.cancelable){
+			if(e.type !== "touchend" || (e.cancelable && window.pageXOffset === scrollX && window.pageYOffset === scrollY)){
 				group.active = this.index;
 				e.preventDefault();
 			}
@@ -88,6 +96,7 @@ class Tab{
 			
 			/** Deactivated */
 			if(this._disabled = input){
+				touchEnabled && label.removeEventListener("touchstart", this.onTouchStart);
 				label.removeEventListener(pressEvent, this.onPress);
 				classes.remove(active);
 				style.left = null;
@@ -110,6 +119,7 @@ class Tab{
 			
 			/** Reactivated */
 			else{
+				touchEnabled && label.addEventListener("touchstart", this.onTouchStart);
 				label.addEventListener(pressEvent, this.onPress);
 				group.active === this.index && classes.add(active);
 				style.left = this._offset + "px";

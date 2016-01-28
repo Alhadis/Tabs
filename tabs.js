@@ -198,6 +198,8 @@
 		var elClasses    = el.classList;
 		var labelStyle   = label.style;
 		var activeClass  = group.activeClass;
+		var scrollX, scrollY;
+		var onTouchStart;
 		var onKeyDown;
 		var onPress;
 
@@ -221,6 +223,7 @@
 						
 						/** Deactivated */
 						if(_disabled = input){
+							touchEnabled && label.removeEventListener("touchstart", onTouchStart);
 							label.removeEventListener(pressEvent, onPress);
 							elClasses.remove(activeClass);
 							labelStyle.left = null;
@@ -243,6 +246,7 @@
 						
 						/** Reactivated */
 						else{
+							touchEnabled && label.addEventListener("touchstart", onTouchStart);
 							label.addEventListener(pressEvent, onPress);
 							group.active === THIS.index && elClasses.add(activeClass);
 							labelStyle.left = _offset + "px";
@@ -477,8 +481,16 @@
 			});
 		}
 		
+		
+		/** Listener to record the viewport's scroll offsets at the beginning of a touch */
+		touchEnabled && label.addEventListener("touchstart", onTouchStart = function(e){
+			scrollX = window.pageXOffset;
+			scrollY = window.pageYOffset;
+		});
+		
+		
 		label.addEventListener(pressEvent, onPress = function(e){
-			if(e.type !== "touchend" || e.cancelable){
+			if(e.type !== "touchend" || (e.cancelable && window.pageXOffset === scrollX && window.pageYOffset === scrollY)){
 				group.active = THIS.index;
 				e.preventDefault();
 			}
